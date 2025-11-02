@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 # search thresholds for imbalanced classification
 def get_proba_threshold(model, X_val, y_val):
   from numpy import arange, argmax
@@ -44,6 +45,7 @@ def is_ks_abnormality_detected(ks_table,verbose=True):
   return 0, None
 
 def get_ks_table(df,y_true_col='positive',y_pred_proba_col='proba',verbose=True):
+  import numpy as np
   temp_df = df[[y_true_col,y_pred_proba_col]].copy()
   n = len(temp_df)/10
   volume = []
@@ -110,11 +112,10 @@ def apply_model_and_get_ks_table(model, X_train, y_train, X_test, y_test, best_p
     test_ks_table = get_ks_table(test_data, verbose=verbose)
 
 
-    train_ks_table.to_csv('/tmp/train_ks_table.csv',index=False)
-    test_ks_table.to_csv('/tmp/test_ks_table.csv',index=False)
+    train_ks_table.to_csv('/Users/saurabh.prajapati/Documents/Medisyn-Labs/data/train_ks_table.csv',index=False)
+    test_ks_table.to_csv('/Users/saurabh.prajapati/Documents/Medisyn-Labs/data/test_ks_table.csv',index=False)
 
-    mlflow.log_artifact("/tmp/train_ks_table.csv","metrics/")
-    mlflow.log_artifact("/tmp/test_ks_table.csv","metrics/")
+
 
 
 def log_model_eval_metrics( model, X_train, y_train, X_test, y_test,best_proba_threshold):
@@ -151,6 +152,7 @@ def log_model_eval_metrics( model, X_train, y_train, X_test, y_test,best_proba_t
 
                   ]
     }
+    print(eval_metrics_dict)
     
     eval_metrics_df=pd.DataFrame(eval_metrics_dict)
 
