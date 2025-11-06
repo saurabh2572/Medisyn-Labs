@@ -11,3 +11,5 @@
     psutil==5.9.8 \
     pyarrow==15.0.2 \
     optuna
+    sentence-transformers
+    keybert
