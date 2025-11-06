@@ -91,7 +91,7 @@ def get_ks_table(df,y_true_col='positive',y_pred_proba_col='proba',verbose=True)
 #     display(ks_table)
   return ks_table
 
-def apply_model_and_get_ks_table(model, X_train, y_train, X_test, y_test, best_proba_threshold, y_true_col='positive', y_pred_proba_col='proba', verbose=True):
+def apply_model_and_get_ks_table(model,path, X_train, y_train, X_test, y_test, best_proba_threshold, y_true_col='positive', y_pred_proba_col='proba', verbose=True):
     def concat_y_true_y_pred_proba(y_true_col,y_pred_proba_col):
         data = pd.DataFrame(y_true_col.copy())
         data.columns = ['positive']
@@ -112,13 +112,14 @@ def apply_model_and_get_ks_table(model, X_train, y_train, X_test, y_test, best_p
     test_ks_table = get_ks_table(test_data, verbose=verbose)
 
 
-    train_ks_table.to_csv('/Users/saurabh.prajapati/Documents/Medisyn-Labs/data/train_ks_table.csv',index=False)
-    test_ks_table.to_csv('/Users/saurabh.prajapati/Documents/Medisyn-Labs/data/test_ks_table.csv',index=False)
+    train_ks_table.to_csv(f"/Users/saurabh.prajapati/Documents/Medisyn-Labs/data/evaluation_metrics/train_ks_table.csv",index=False)
+    test_ks_table.to_csv(f"/Users/saurabh.prajapati/Documents/Medisyn-Labs/data/evaluation_metrics/test_ks_table.csv",index=False)
+    
 
 
 
 
-def log_model_eval_metrics( model, X_train, y_train, X_test, y_test,best_proba_threshold):
+def log_model_eval_metrics( model, X_train, y_train, X_test, y_test,best_proba_threshold, path):
     y_train_proba = model.predict_proba(X_train)[:, 1]
     y_test_proba=model.predict_proba(X_test)[:, 1]
 
@@ -157,12 +158,7 @@ def log_model_eval_metrics( model, X_train, y_train, X_test, y_test,best_proba_t
     eval_metrics_df=pd.DataFrame(eval_metrics_dict)
 
     eval_metrics_df.insert(0,'type',['train', 'test'])
-    return eval_metrics_df
+    eval_metrics_df.to_csv(path,index=False)
 
-# class SklearnModelWrapper(mlflow.pyfunc.PythonModel):
-#     def __init__(self, model):
-#         self.model = model
-    
-#     def predict(self, context, model_input):
-#         return self.model.predict_proba(model_input)[:, 1]
+
 
